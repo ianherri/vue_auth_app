@@ -16,5 +16,12 @@ import NavBar from './components/NavBar.vue'
 <style>
 * {
   margin: 0;
+  text-decoration: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: normal;
+}
+
+a {
+  color: rgb(0, 0, 0);
 }
 </style>
