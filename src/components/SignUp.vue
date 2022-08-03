@@ -1,61 +1,65 @@
 <template>
-  <h3>Sign Up</h3>
-  <form @submit.prevent="handleSignUp">
-    <div class="form-group">
-      <label>Name</label>
-      <input
-        v-model="user.name"
-        type="text"
-        class="form-control"
-        id="name"
-        placeholder="Name"
-      />
-    </div>
-    <div class="form-group">
-      <label>Email</label>
+  <div class="form-container">
+    <div class="form-wrapper">
+      <h3>Sign Up</h3>
+      <form @submit.prevent="handleSignUp">
+        <div class="form-group">
+          <label>Name</label>
+          <input
+            v-model="user.name"
+            type="text"
+            class="form-control"
+            id="name"
+            placeholder="Name"
+          />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
 
-      <input
-        v-model="user.email"
-        type="email"
-        class="form-control"
-        id="email"
-        placeholder="Email"
-      />
-      <br />
-    </div>
+          <input
+            v-model="user.email"
+            type="email"
+            class="form-control"
+            id="email"
+            placeholder="Email"
+          />
+        </div>
 
-    <div class="form-group">
-      <label>Password</label>
-      <input
-        v-model="user.password"
-        type="password"
-        class="form-control"
-        id="password"
-        placeholder="Password"
-      />
+        <div class="form-group">
+          <label>Password</label>
+          <input
+            v-model="user.password"
+            type="password"
+            class="form-control"
+            id="password"
+            placeholder="Password"
+          />
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input
+            v-model="user.password_confirm"
+            type="password"
+            class="form-control"
+            id="confirm-password"
+            placeholder="Confirm password"
+          />
+        </div>
+        <button class="btn btn-primary">Create Account</button>
+        <div class="error-message" v-if="msg.length > 0">
+          <div v-for="m in msg" :key="m.id">
+            <div>{{ m }}</div>
+          </div>
+        </div>
+      </form>
     </div>
-    <div class="form-group">
-      <label>Confirm Password</label>
-      <input
-        v-model="user.password_confirm"
-        type="password"
-        class="form-control"
-        id="confirm-password"
-        placeholder="confirm-password"
-      />
-    </div>
-
-    <button class="btn btn-primary">Create Account</button>
-    <div v-for="m in msg" :key="m.id">
-      <div>{{ m }}</div>
-    </div>
-  </form>
+  </div>
 </template>
 
 <script setup>
-import axios from 'axios'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import useAuth from '../utils/auth'
 
 const user = {
   name: '',
@@ -87,20 +91,28 @@ async function handleSignUp() {
   if (msg.value.length > 0) {
     return
   } else {
-    const response = await axios
-      .post('http://localhost:8000/signup', user)
-      .catch((error) => {
-        if (error.response.status === 400) {
-          msg.value.push('this email is already taken try again')
-        }
-      })
-    console.log(response)
-  }
-
-  if (msg.value.length > 0) {
-    return
-  } else {
-    router.push('/login')
+    const response = await useAuth().signUp(user)
+    if (!response.error) {
+      router.push('/login')
+    } else {
+      msg.value.push(response.error)
+    }
   }
 }
 </script>
+
+<style>
+.error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  gap: 10px;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid red;
+  color: crimson;
+  margin-top: 10px;
+  padding: 10px;
+  position: absolute;
+  border-radius: 4px;
+}
+</style>

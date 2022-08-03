@@ -1,17 +1,16 @@
 <template>
-  <div>Goodbye</div>
-  <button @click.prevent="handleLogOut">logout</button>
+  <div></div>
 </template>
 
 <script setup>
-import { logOut } from '@/utils/auth'
+import useAuth from '@/utils/auth'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-onMounted(() => {
-  logOut()
+onMounted(async () => {
+  await useAuth().logOut()
   router.push('/login')
 })
 </script>
