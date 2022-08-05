@@ -53,12 +53,14 @@ const login = require('./routes/login')
 const home = require('./routes/home')
 const logout = require('./routes/logout')
 const user = require('./routes/user')
+const messages = require('./routes/messages')
 
 app.use('/signup', signup)
 app.use('/login', login)
 app.use('/home', home)
 app.use('/logout', logout)
 app.use('/user', user)
+app.use('/messages', messages)
 
 app.listen(8000, () => {
   console.log('server listening on port 8000')

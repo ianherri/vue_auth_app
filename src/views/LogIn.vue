@@ -6,7 +6,7 @@
         <div class="form-group">
           <label>Email</label>
           <input
-            v-model="user.email"
+            v-model="creds.email"
             type="email"
             class="form-control"
             placeholder="email"
@@ -15,7 +15,7 @@
         <div class="form-group">
           <label>Password</label>
           <input
-            v-model="user.password"
+            v-model="creds.password"
             type="password"
             class="form-control"
             placeholder="password"
@@ -28,19 +28,19 @@
 </template>
 
 <script setup>
-import useAuth from '../utils/auth'
+import useAuth from '../composables/auth'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 
 const router = useRouter()
 
-const user = ref({
+const creds = ref({
   email: '',
   password: '',
 })
 
 async function handleLogIn() {
-  const response = await useAuth().logIn(user.value)
+  const response = await useAuth().logIn(creds.value)
   if (!response.error) {
     router.push('/')
   }
@@ -51,8 +51,9 @@ async function handleLogIn() {
 .form-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: top;
   align-items: center;
+  padding-top: 60px;
   height: 100vh;
   background-color: rgb(255, 255, 255);
 }
@@ -90,8 +91,7 @@ async function handleLogIn() {
   width: 100%;
   border-radius: 4px;
   padding: 8px;
-  background-color: #ffffff;
-  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.9);
+  background-color: rgb(255, 228, 152);
   border-radius: 4px;
   border: none;
   cursor: pointer;
