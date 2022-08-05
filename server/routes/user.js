@@ -7,8 +7,6 @@ const ObjectId = require('mongodb').ObjectId
 const router = express.Router()
 const uri = process.env.MONGODB_URI
 
-// login user
-
 router.get('/', async (req, res) => {
   const users = await loadUserCollection()
   const userid = req.session.userid

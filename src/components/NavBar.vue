@@ -12,6 +12,9 @@
           <div v-if="!loggedIn" class="nav-item">
             <router-link to="/signup">Sign Up</router-link>
           </div>
+          <div v-if="loggedIn" class="nav-item party-button">
+            <router-link to="/party">Join the Party</router-link>
+          </div>
           <div v-if="loggedIn" class="nav-item">
             <router-link to="/logout">Logout</router-link>
           </div>
@@ -22,9 +25,9 @@
 </template>
 
 <script setup>
-import useAuth from '../utils/auth'
+import useAuth from '../composables/auth'
 
-const loggedIn = useAuth().loggedIn
+const { loggedIn } = useAuth()
 </script>
 
 <style>
@@ -32,10 +35,10 @@ const loggedIn = useAuth().loggedIn
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 10px 0px 10px 20px;
-  width: 100vw;
+  padding: 20px 0px 0px 40px;
+  width: auto;
   height: auto;
-  position: fixed;
+  position: sticky;
 }
 
 .navbar-nav {
@@ -54,7 +57,7 @@ const loggedIn = useAuth().loggedIn
   padding: 4px 8px;
   gap: 10px;
 
-  width: 56px;
+  width: auto;
   height: 25px;
 
   background: #ffffff;
@@ -70,5 +73,10 @@ const loggedIn = useAuth().loggedIn
   border-bottom: 1px solid darkblue;
   padding-bottom: 5px;
   transition: 500ms;
+}
+
+.party-button {
+  background-color: rgb(255, 228, 152);
+  border-radius: 8px;
 }
 </style>

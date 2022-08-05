@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
   if (matches && matches.password === user.password) {
     const session = req.session
     session.userid = matches._id.toString()
-    res.sendStatus(200)
+    res.send({ id: matches._id, name: matches.name, email: matches.email })
   } else {
     res.sendStatus(400)
   }

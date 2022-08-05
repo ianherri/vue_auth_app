@@ -5,10 +5,15 @@ axios.defaults.withCredentials = true
 
 // returns a response to determine if user can make request
 // check response.status
-//
+
+// basically all the responses from the server will let us know if we are authenticated. The verification happens on the server side.
+
+// TODO: destroy session on browser close
 
 const loaded = ref(false)
 const loggedIn = ref(false)
+const loading = ref(true)
+const user = ref({})
 
 async function makeAuthRequest() {
   const response = await axios
@@ -30,19 +35,21 @@ async function logOut() {
     })
   if (!response.error) {
     loggedIn.value = false
+    user.value = {}
   }
   return response
 }
 
-async function logIn(user) {
+async function logIn(creds) {
   const response = await axios
-    .post('http://localhost:8000/login', user)
+    .post('http://localhost:8000/login', creds)
     .catch((error) => {
       console.log(error)
       return { error: 'Log in error, try again' }
     })
   if (!response.error) {
     loggedIn.value = true
+    user.value = response.data
   }
   return response
 }
@@ -52,6 +59,7 @@ async function getUser() {
     console.log(error)
     return { error: 'Not authenticated' }
   })
+  console.log(user)
   return user
 }
 
@@ -72,13 +80,24 @@ async function signUp(user) {
 export default function useAuth() {
   onMounted(async () => {
     if (!loaded.value) {
-      const user = await getUser()
+      const res = await getUser()
       loaded.value = true
-      if (!user.error) {
+      if (!res.error) {
         loggedIn.value = true
+        user.value = res.data
       }
+      loading.value = false
     }
   })
 
-  return { makeAuthRequest, logOut, logIn, getUser, signUp, loggedIn }
+  return {
+    makeAuthRequest,
+    logOut,
+    logIn,
+    getUser,
+    signUp,
+    loggedIn,
+    user,
+    loading,
+  }
 }

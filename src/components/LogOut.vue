@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import useAuth from '@/utils/auth'
+import useAuth from '../composables/auth'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 

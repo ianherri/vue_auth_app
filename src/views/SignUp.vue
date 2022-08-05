@@ -59,7 +59,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import useAuth from '../utils/auth'
+import useAuth from '../composables/auth'
 
 const user = {
   name: '',
