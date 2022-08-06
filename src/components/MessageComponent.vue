@@ -7,9 +7,12 @@
         posted at: {{ format(message.timestamp, 'YYYY-MM-DD HH:mm') }}
       </p>
     </div>
-  </div>
-  <div v-if="reply">
-    <AddMessage />
+    <div class="reply-btn">
+      <a @click.prevent="handleReply"><span class="icon"></span></a>
+    </div>
+    <div v-if="showReply">
+      <AddReply :user="user" :parentId="message._id" />
+    </div>
   </div>
 </template>
 
@@ -17,17 +20,26 @@
 import { defineProps, toRefs, ref } from 'vue'
 import { format } from 'date-format-parse'
 import { useRouter } from 'vue-router'
-import AddMessage from '../components/AddMessage.vue'
+import AddReply from './AddReply.vue'
 
 const router = useRouter()
-const reply = ref(false)
+
 const props = defineProps({
   message: Object,
+  user: Object,
 })
-const { message } = toRefs(props)
+const { message, user } = toRefs(props)
+
+const showReply = ref(false)
 
 function handleMessageClick(message) {
+  console.log(`howdy ${user.value.name}`)
   router.push(`/message/${message._id}`)
+}
+
+function handleReply() {
+  console.log(`howdy ${user.value.name}`)
+  showReply.value = !showReply.value
 }
 </script>
 
@@ -39,8 +51,7 @@ function handleMessageClick(message) {
   flex-wrap: wrap;
   flex-grow: 0;
   padding: 20px;
-  min-width: 200px;
-  max-width: fit-content;
+  width: 250px;
   gap: 10px;
   background: #ffffff;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
@@ -60,5 +71,20 @@ function handleMessageClick(message) {
 
 .username-label {
   color: rgb(255, 187, 28);
+}
+
+.reply-btn {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.icon {
+  background-image: url('../assets/reply-icon.png');
+  height: 20px;
+  width: 20px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: flex;
+  float: right;
 }
 </style>

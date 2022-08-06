@@ -33,6 +33,7 @@ app.use(
       client,
       dbName: 'test',
       collectionName: 'sessions',
+      autoRemove: 'native',
     }),
   })
 )

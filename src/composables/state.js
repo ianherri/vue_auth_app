@@ -36,7 +36,7 @@ async function getMessage(id) {
 async function getReplies(id) {
   const response = await getMessages()
   console.log(id)
-  const replies = response.data.filter((message) => message.parentId === id)[0]
+  const replies = response.data.filter((message) => message.parentId === id)
   console.log(replies)
   return replies
 }
