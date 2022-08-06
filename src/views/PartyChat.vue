@@ -1,14 +1,23 @@
 <template>
+  <div class="add-message-modal">
+    <div v-if="showAddMessage">
+      <AddMessage :user="user" />
+    </div>
+  </div>
   <div class="sticky-btn">
     <button @click.prevent="handleNewPost" class="btn shitpost-btn">
       new post
     </button>
   </div>
+
   <div class="party-page">
     <h3>Welcome to the party {{ user.name }}!</h3>
     <div class="party-container">
-      <div v-for="message in messages" :key="message._id">
-        <MessageComponent :message="message" />
+      <div
+        v-for="message in messages.filter((message) => message.reply === false)"
+        :key="message._id"
+      >
+        <MessageComponent :message="message" :user="user" />
       </div>
     </div>
   </div>
@@ -18,9 +27,17 @@
 import useState from '../composables/state'
 import useAuth from '../composables/auth'
 import MessageComponent from '../components/MessageComponent.vue'
+import { ref } from 'vue'
+import AddMessage from '@/components/AddMessage.vue'
 
 const { messages } = useState()
 const { user } = useAuth()
+
+const showAddMessage = ref(false)
+
+function handleNewPost() {
+  showAddMessage.value = !showAddMessage.value
+}
 </script>
 
 <style>
@@ -58,5 +75,11 @@ const { user } = useAuth()
   position: fixed;
   right: 20px;
   bottom: 20px;
+}
+
+.add-message-modal {
+  position: fixed;
+  right: 20px;
+  bottom: 100px;
 }
 </style>

@@ -6,7 +6,6 @@
         <h3>Hello, {{ user.name }}</h3>
         <div class="content">send your first party chat below</div>
       </div>
-      <AddMessage :user="user" :parentMessage="null" />
     </div>
     <div v-if="!loggedIn" class="content-container">
       <div class="error-message">
@@ -18,7 +17,6 @@
 
 <script setup>
 import useAuth from '../composables/auth'
-import AddMessage from '../components/AddMessage.vue'
 
 const { loggedIn, user, loading } = useAuth()
 </script>
