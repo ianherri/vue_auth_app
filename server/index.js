@@ -51,6 +51,7 @@ app.use(
 // routes
 const signup = require('./routes/signup')
 const login = require('./routes/login')
+const web3login = require('./routes/web3login')
 const home = require('./routes/home')
 const logout = require('./routes/logout')
 const user = require('./routes/user')
@@ -58,6 +59,7 @@ const messages = require('./routes/messages')
 
 app.use('/signup', signup)
 app.use('/login', login)
+app.use('/web3login', web3login)
 app.use('/home', home)
 app.use('/logout', logout)
 app.use('/user', user)

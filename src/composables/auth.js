@@ -26,6 +26,18 @@ async function makeAuthRequest() {
   return response
 }
 
+async function makeWeb3AuthRequest(creds) {
+  const response = await axios
+    .post('http://localhost:8000/web3login', creds)
+    .catch((error) => {
+      console.log(error)
+      return { error: 'web3 login failed' }
+    })
+  loggedIn.value = true
+  user.value = response.data
+  return response
+}
+
 async function logOut() {
   const response = await axios
     .get('http://localhost:8000/logout')
@@ -59,7 +71,13 @@ async function getUser() {
     console.log(error)
     return { error: 'Not authenticated' }
   })
-  console.log(user)
+  if (!user.error) {
+    loggedIn.value = true
+    console.log(loggedIn.value)
+  } else {
+    console.log(loggedIn.value)
+    loggedIn.value = false
+  }
   return user
 }
 
@@ -99,5 +117,6 @@ export default function useAuth() {
     loggedIn,
     user,
     loading,
+    makeWeb3AuthRequest,
   }
 }

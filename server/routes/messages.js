@@ -2,8 +2,11 @@ require('dotenv').config()
 
 const express = require('express')
 const mongodb = require('mongodb')
+const auth = require('../middleware/auth')
 
 const router = express.Router()
+router.use(auth)
+
 const uri = process.env.MONGODB_URI
 
 // login user

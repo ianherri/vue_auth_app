@@ -28,16 +28,12 @@ async function getMessages() {
 
 async function getMessage(id) {
   const response = await getMessages()
-  console.log(id)
   const message = response.data.filter((message) => message._id === id)[0]
-  console.log(message)
   return message
 }
 async function getReplies(id) {
   const response = await getMessages()
-  console.log(id)
   const replies = response.data.filter((message) => message.parentId === id)
-  console.log(replies)
   return replies
 }
 
