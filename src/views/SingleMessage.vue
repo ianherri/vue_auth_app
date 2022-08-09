@@ -1,10 +1,15 @@
 <template>
-  <div class="content-container">
-    <a @click.prevent="handleRefresh">refresh</a>
-    <MessageComponent :message="message" :user="user" />
-    <div v-for="reply in replies" :key="reply._id">
-      <RepliesComponent :reply="reply" />
+  <div v-if="loggedIn">
+    <div class="content-container">
+      <a @click.prevent="handleRefresh">refresh</a>
+      <MessageComponent :message="message" :user="user" />
+      <div v-for="reply in replies" :key="reply._id">
+        <RepliesComponent :reply="reply" />
+      </div>
     </div>
+  </div>
+  <div v-else>
+    <LoginRedirect />
   </div>
 </template>
 
@@ -15,12 +20,13 @@ import useState from '../composables/state'
 import useAuth from '../composables/auth'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import LoginRedirect from '@/components/LoginRedirect.vue'
 
 const param = useRoute().params.id
 const message = ref({})
 const replies = ref([])
 
-const { user } = useAuth()
+const { user, loggedIn } = useAuth()
 
 onMounted(async () => {
   console.log('are we here')

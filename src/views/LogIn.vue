@@ -23,6 +23,16 @@
         </div>
         <button class="btn btn-primary btn-block">Login</button>
       </form>
+      <button
+        @click.prevent="handleEthLogin"
+        v-if="isMetaMaskInstalled"
+        class="btn web3"
+      >
+        Login w Metamask
+      </button>
+      <div v-if="!isMetaMaskInstalled" class="warning">
+        Must Download Metamask
+      </div>
     </div>
   </div>
 </template>
@@ -30,9 +40,26 @@
 <script setup>
 import useAuth from '../composables/auth'
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+
+import { ethers } from 'ethers'
+
+const { logIn, makeWeb3AuthRequest, loggedIn } = useAuth()
 
 const router = useRouter()
+const { ethereum } = window
+
+onMounted(async () => {
+  await useAuth().getUser()
+  if (loggedIn.value) {
+    router.push('/')
+  }
+})
+
+const isMetaMaskInstalled = () => {
+  //Have to check the ethereum binding on the window object to see if it's installed
+  return Boolean(ethereum && ethereum.isMetaMask)
+}
 
 const creds = ref({
   email: '',
@@ -40,7 +67,55 @@ const creds = ref({
 })
 
 async function handleLogIn() {
-  const response = await useAuth().logIn(creds.value)
+  const response = await logIn(creds.value)
+  if (!response.error) {
+    router.push('/')
+  }
+}
+
+// when login with metamask is clicked we retrieve and return the accounts associated with the wallet
+//  see this link to compare signed message and public key
+// https://github.com/OpenQDev/OpenQ-Github-OAuth-Server/pull/1/files
+async function handleEthLogin() {
+  /*  const res = await ethereum
+    .request({ method: 'eth_requestAccounts' })
+    .catch((error) => console.log(error))
+
+  const address = res[0]
+  console.log(address)
+
+  ethereum.on('message', (message) => console.log(message))
+
+  ethereum.on('connect', (info) => console.log(`connected to network ${info}`))
+
+  const signedMessage = ethereum
+    .request({ method: 'personal_sign', params: [address, '0x00000'] })
+    .catch((error) => console.log(error))
+
+  console.log(signedMessage) */
+
+  // A Web3Provider wraps a standard Web3 provider, which is
+  // what MetaMask injects as window.ethereum into each page
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
+
+  // MetaMask requires requesting permission to connect users accounts
+  const address = await provider.send('eth_requestAccounts', [])
+
+  // The MetaMask plugin also allows signing transactions to
+  // send ether and pay to change state within the blockchain.
+  // For this, you need the account signer...
+  const signer = provider.getSigner()
+  const nonce = `nonce signed on ${new Date().getTime()}`
+
+  const signature = await signer.signMessage(nonce)
+  console.log(signer)
+  console.log(signature)
+
+  const response = await makeWeb3AuthRequest({
+    address: address[0],
+    signature: signature,
+    message: nonce,
+  })
   if (!response.error) {
     router.push('/')
   }
@@ -95,6 +170,10 @@ async function handleLogIn() {
   border-radius: 4px;
   border: none;
   cursor: pointer;
+}
+
+.web3 {
+  background-color: rgb(224, 146, 255);
 }
 label {
   width: auto;

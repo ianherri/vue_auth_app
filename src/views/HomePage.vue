@@ -8,15 +8,14 @@
       </div>
     </div>
     <div v-if="!loggedIn" class="content-container">
-      <div class="error-message">
-        please <span><a href="/login">log in</a></span>
-      </div>
+      <LoginRedirect />
     </div>
   </div>
 </template>
 
 <script setup>
 import useAuth from '../composables/auth'
+import LoginRedirect from '@/components/LoginRedirect.vue'
 
 const { loggedIn, user, loading } = useAuth()
 </script>

@@ -3,9 +3,12 @@ require('dotenv').config()
 const express = require('express')
 const mongodb = require('mongodb')
 const ObjectId = require('mongodb').ObjectId
-
+const auth = require('../middleware/auth')
 const router = express.Router()
+
 const uri = process.env.MONGODB_URI
+
+router.use(auth)
 
 router.get('/', async (req, res) => {
   const users = await loadUserCollection()
