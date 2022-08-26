@@ -21,6 +21,20 @@ router.get('/', async (req, res) => {
   } else res.sendStatus(400)
 })
 
+router.post('/', async (req, res) => {
+  const users = await loadUserCollection()
+  const userid = req.session.userid
+  const newName = req.body.name
+  if (userid) {
+    const query = { _id: new ObjectId(userid) }
+    const updateDoc = { $set: { name: newName } }
+
+    const result = await users.updateOne(query, updateDoc)
+    console.log(result)
+    res.sendStatus(200)
+  } else res.sendStatus(400)
+})
+
 async function loadUserCollection() {
   const client = await mongodb.MongoClient.connect(uri, {
     useNewURLParser: true,

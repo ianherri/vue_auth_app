@@ -1,10 +1,11 @@
 <template>
   <div class="loading" v-if="loading">loading</div>
+
   <div v-else>
     <div v-if="loggedIn" class="content-container">
       <div class="content-wrapper">
         <h3>Hello, {{ user.name }}</h3>
-        <div class="content">send your first party chat below</div>
+        <EditUser :user="user" />
       </div>
     </div>
     <div v-if="!loggedIn" class="content-container">
@@ -16,6 +17,7 @@
 <script setup>
 import useAuth from '../composables/auth'
 import LoginRedirect from '@/components/LoginRedirect.vue'
+import EditUser from '@/components/EditUser.vue'
 
 const { loggedIn, user, loading } = useAuth()
 </script>

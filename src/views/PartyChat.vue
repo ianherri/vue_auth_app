@@ -1,7 +1,7 @@
 <template>
   <div v-if="loggedIn">
     <div class="add-message-modal">
-      <div v-if="showAddMessage">
+      <div v-if="visible">
         <AddMessage :user="user" />
       </div>
     </div>
@@ -41,10 +41,10 @@ import LoginRedirect from '@/components/LoginRedirect.vue'
 const { messages } = useState()
 const { user, loggedIn } = useAuth()
 
-const showAddMessage = ref(false)
+const visible = ref(false)
 
 function handleNewPost() {
-  showAddMessage.value = !showAddMessage.value
+  visible.value = !visible.value
 }
 </script>
 

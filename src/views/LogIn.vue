@@ -40,21 +40,14 @@
 <script setup>
 import useAuth from '../composables/auth'
 import { useRouter } from 'vue-router'
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 
 import { ethers } from 'ethers'
 
-const { logIn, makeWeb3AuthRequest, loggedIn } = useAuth()
+const { logIn, makeWeb3AuthRequest } = useAuth()
 
 const router = useRouter()
 const { ethereum } = window
-
-onMounted(async () => {
-  await useAuth().getUser()
-  if (loggedIn.value) {
-    router.push('/')
-  }
-})
 
 const isMetaMaskInstalled = () => {
   //Have to check the ethereum binding on the window object to see if it's installed

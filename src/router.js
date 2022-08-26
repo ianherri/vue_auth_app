@@ -5,6 +5,7 @@ import SignUp from './views/SignUp.vue'
 import LogOut from './components/LogOut.vue'
 import PartyChat from './views/PartyChat.vue'
 import SingleMessage from './views/SingleMessage.vue'
+import useAuth from './composables/auth'
 
 const routes = [
   { path: '/', component: HomePage },
@@ -18,6 +19,18 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+})
+
+const { loggedIn, getUser } = useAuth()
+
+// TODO; when direct navigating it doesn't wait for loggedIn value to update
+router.beforeEach(async (to) => {
+  await getUser()
+  if (!loggedIn.value && to.path === ('/signup' || '/login')) {
+    return true
+  } else if (!loggedIn.value && to.path !== ('/login' || '/signup')) {
+    return { path: '/login' }
+  }
 })
 
 export default router

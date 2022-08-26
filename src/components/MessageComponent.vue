@@ -3,13 +3,18 @@
     <div class="message" @click.prevent="handleMessageClick(message)">
       <h4 class="username-label">@ {{ message.username }}:</h4>
       <div>{{ message.text }}</div>
-      <p class="time-label">
+      <p class="sub-label time">
         posted at: {{ format(message.timestamp, 'YYYY-MM-DD HH:mm') }}
+      </p>
+      <p class="sub-label upvotes">
+        this post upvoted {{ countUpVotes }} times
       </p>
     </div>
     <div class="reply-btn">
       <a @click.prevent="handleReply"><span class="icon"></span></a>
+      <a @click.prevent="handleUpVote" class="upvote">upvote</a>
     </div>
+
     <div v-if="showReply">
       <AddReply :user="user" :parentId="message._id" />
     </div>
@@ -17,18 +22,25 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs, ref } from 'vue'
+import { defineProps, toRefs, ref, computed } from 'vue'
 import { format } from 'date-format-parse'
 import { useRouter } from 'vue-router'
 import AddReply from './AddReply.vue'
 
 const router = useRouter()
+const localUpVotes = ref([])
 
 const props = defineProps({
   message: Object,
   user: Object,
 })
 const { message, user } = toRefs(props)
+
+const countUpVotes = computed(() => {
+  console.log(message.value)
+  console.log(localUpVotes.value.length)
+  return message.value.upVotes.length + localUpVotes.value.length
+})
 
 const showReply = ref(false)
 
@@ -40,6 +52,11 @@ function handleMessageClick(message) {
 function handleReply() {
   console.log(`howdy ${user.value.name}`)
   showReply.value = !showReply.value
+}
+
+function handleUpVote() {
+  localUpVotes.value.push({ messageId: message.value._id })
+  console.log(localUpVotes.value)
 }
 </script>
 
@@ -64,7 +81,7 @@ function handleReply() {
   gap: 10px;
 }
 
-.time-label {
+.sub-label {
   color: rgb(109, 109, 109);
   font-size: 10px;
 }
@@ -80,11 +97,15 @@ function handleReply() {
 }
 .icon {
   background-image: url('../assets/reply-icon.png');
-  height: 20px;
-  width: 20px;
+  height: 12px;
+  width: 12px;
   background-repeat: no-repeat;
   background-size: contain;
   display: flex;
   float: right;
+}
+.upvote {
+  margin-left: auto;
+  font-size: 10px;
 }
 </style>
