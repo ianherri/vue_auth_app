@@ -3,6 +3,7 @@ require('dotenv').config()
 const express = require('express')
 const mongodb = require('mongodb')
 const auth = require('../middleware/auth')
+const ObjectId = require('mongodb').ObjectId
 
 const router = express.Router()
 router.use(auth)
@@ -19,6 +20,7 @@ router.post('/', async (req, res) => {
     reply: req.body.reply,
     parentId: req.body.parentId,
     username: req.body.username,
+    upVotes: req.body.upVotes,
     userid: userid,
     timestamp: new Date(),
   }
@@ -29,6 +31,23 @@ router.post('/', async (req, res) => {
   } else {
     res.sendStatus(400)
   }
+})
+
+router.post('/upvote', async (req, res) => {
+  const messagesCollection = await loadMessageCollection()
+  const userid = req.session.userid
+  const messageId = req.body.messageId
+
+  if (messageId) {
+    const query = { _id: new ObjectId(messageId) }
+    const ogDoc = await messagesCollection.findOne(query)
+    ogDoc.upVotes.push(userid)
+    const updateDoc = { $set: { upVotes: ogDoc.upVotes } }
+
+    const result = await messagesCollection.updateOne(query, updateDoc)
+    console.log(result)
+    res.sendStatus(200)
+  } else res.sendStatus(400)
 })
 
 router.get('/', async (req, res) => {

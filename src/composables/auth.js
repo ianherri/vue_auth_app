@@ -73,9 +73,7 @@ async function getUser() {
   })
   if (!user.error) {
     loggedIn.value = true
-    console.log(loggedIn.value)
   } else {
-    console.log(loggedIn.value)
     loggedIn.value = false
   }
   return user
@@ -91,6 +89,17 @@ async function signUp(user) {
       else {
         return { error: 'some other signup error' }
       }
+    })
+  return response
+}
+
+async function editUser(user) {
+  console.log(user)
+  const response = await axios
+    .post('http://localhost:8000/user', user)
+    .catch((error) => {
+      console.log(error)
+      if (error) return error
     })
   return response
 }
@@ -114,9 +123,10 @@ export default function useAuth() {
     logIn,
     getUser,
     signUp,
-    loggedIn,
     user,
     loading,
     makeWeb3AuthRequest,
+    loggedIn,
+    editUser,
   }
 }

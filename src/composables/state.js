@@ -16,6 +16,17 @@ async function postMessage(message) {
     })
   return response
 }
+
+async function upVote(messageId) {
+  const response = await axios
+    .post('http://localhost:8000/messages/upvote', messageId)
+    .catch((error) => {
+      console.log(error)
+      return { error: 'something happened bad trying to post this' }
+    })
+  return response
+}
+
 async function getMessages() {
   const response = await axios
     .get('http://localhost:8000/messages')
@@ -31,6 +42,7 @@ async function getMessage(id) {
   const message = response.data.filter((message) => message._id === id)[0]
   return message
 }
+
 async function getReplies(id) {
   const response = await getMessages()
   const replies = response.data.filter((message) => message.parentId === id)
@@ -48,5 +60,5 @@ export default function useState() {
       loading.value = false
     }
   })
-  return { postMessage, messages, getMessage, getReplies }
+  return { postMessage, messages, getMessage, getReplies, upVote }
 }

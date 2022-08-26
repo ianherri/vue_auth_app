@@ -35,6 +35,7 @@ async function handleMessage() {
     text: message.value.text,
     username: user.value.name,
     reply: false,
+    upVotes: [],
     parentId: '',
   })
   if (response.error) {

@@ -35,6 +35,7 @@ async function handleMessage() {
     username: user.value.name,
     reply: true,
     parentId: parentId.value,
+    upVotes: [],
   })
   if (response.error) {
     msg.value.push(response.error)
