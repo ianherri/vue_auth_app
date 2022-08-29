@@ -110,7 +110,7 @@ async function handleEthLogin() {
     message: nonce,
   })
   if (!response.error) {
-    router.push('/')
+    router.push('/createdescription')
   }
 }
 </script>

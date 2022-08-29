@@ -49,6 +49,21 @@ async function getReplies(id) {
   return replies
 }
 
+async function createDescription(text) {
+  const prompt = {
+    prompt: `Write a product description for a ${text.title} using the words: ${text.seedWords}`,
+  }
+  const description = await axios
+    .post('http://localhost:8000/textcompletion', prompt)
+    .catch((error) => {
+      console.log(error)
+      return { error: 'something happened bad trying to create a description' }
+    })
+  return description
+  /*  console.log(title)
+  return 'placeholder description' */
+}
+
 export default function useState() {
   onMounted(async () => {
     if (!loaded.value) {
@@ -60,5 +75,12 @@ export default function useState() {
       loading.value = false
     }
   })
-  return { postMessage, messages, getMessage, getReplies, upVote }
+  return {
+    createDescription,
+    postMessage,
+    messages,
+    getMessage,
+    getReplies,
+    upVote,
+  }
 }
