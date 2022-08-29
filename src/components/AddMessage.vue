@@ -62,7 +62,7 @@ async function handleMessage() {
 }
 .message-input {
   resize: none;
-  display: block;
+  display: flex;
   align-self: right;
   min-width: auto;
   width: 100%;

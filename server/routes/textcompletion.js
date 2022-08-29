@@ -20,12 +20,13 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const text = req.body
   console.log(text)
-  console.log(req.headers)
   const response = await openai.createCompletion({
+    // model: 'text-davinci-002',
     model: 'text-ada-001',
-    prompt: text.text,
-    max_tokens: 20,
-    temperature: 0,
+    prompt: text.prompt,
+    max_tokens: 64,
+    temperature: 0.5,
+    top_p: 1,
   })
   res.send(response.data)
 })

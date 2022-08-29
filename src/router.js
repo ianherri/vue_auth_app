@@ -5,6 +5,7 @@ import SignUp from './views/SignUp.vue'
 import LogOut from './components/LogOut.vue'
 import PartyChat from './views/PartyChat.vue'
 import SingleMessage from './views/SingleMessage.vue'
+import CreateDescription from './views/CreateDescriptions.vue'
 import useAuth from './composables/auth'
 
 const routes = [
@@ -14,6 +15,7 @@ const routes = [
   { path: '/logout', component: LogOut },
   { path: '/party', component: PartyChat },
   { path: '/message/:id', component: SingleMessage },
+  { path: '/createdescription', component: CreateDescription },
 ]
 
 const router = createRouter({
